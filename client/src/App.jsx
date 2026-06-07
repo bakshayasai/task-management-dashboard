@@ -1,7 +1,18 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import "./App.css";
-import { useState } from "react";
 
 function App() {
+  useEffect(() => {
+  axios.get("http://localhost:5000/tasks")
+    .then((res) => {
+      setTasks(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}, []);
+
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([
   { text: "Learn React", completed: false },
@@ -16,6 +27,7 @@ function App() {
   };
 
   return (
+    
     <div className="container">
       <h1>Task Management Dashboard</h1>
               <p>Manage your tasks efficiently</p>
@@ -27,7 +39,15 @@ function App() {
       />
 
       <button onClick={addTask}>Add Task</button>
+<hr />
 
+<h2>Tasks List</h2>
+
+<ul>
+  {tasks.map((task) => (
+    <li key={task._id}>{task.task}</li>
+  ))}
+</ul>
       <ul>
         {tasks.map((item, index) => (
           <li key={index}>

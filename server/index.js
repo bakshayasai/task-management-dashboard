@@ -1,10 +1,17 @@
+
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-
+const mongoose = require("mongoose");
+const Task = require("./models/Task");
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+console.log(process.env.MONGO_URI);
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected 🎉"))
+  .catch((err) => console.log(err));
 let tasks = [
   { id: 1, task: "Learn React" },
   { id: 2, task: "Build MERN App" }
@@ -12,40 +19,46 @@ let tasks = [
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
 });
-app.get("/tasks", (req, res) => {
-  res.json(tasks);
-  });
-  app.post("/tasks", (req, res) => {
-  const newTask = {
-    id: tasks.length + 1,
-    task: req.body.task
-  };
-
-  tasks.push(newTask);
-
-  res.json(newTask);
-});
-app.delete("/tasks/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-
-  tasks = tasks.filter(task => task.id !== id);
-
-  res.json({ message: "Task deleted successfully" });
-});
-app.put("/tasks/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-
-  const task = tasks.find(task => task.id === id);
-
-  if (!task) {
-    return res.status(404).json({
-      message: "Task not found"
-    });
+app.get("/tasks", async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    res.json(tasks);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
+});
 
-  task.task = req.body.task;
+app.post("/tasks", async (req, res) => {
+  try {
+    const newTask = await Task.create({
+      task: req.body.task
+    });
 
-  res.json(task);
+    res.json(newTask);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});  
+app.delete("/tasks/:id", async (req, res) => {
+  try {
+    await Task.findByIdAndDelete(req.params.id);
+    res.json({ message: "Task deleted" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+app.put("/tasks/:id", async (req, res) => {
+  try {
+    const updatedTask = await Task.findByIdAndUpdate(
+      req.params.id,
+      { task: req.body.task },
+      { new: true }
+    );
+
+    res.json(updatedTask);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 app.listen(5000, () => {
   console.log("Server running on port 5000");
