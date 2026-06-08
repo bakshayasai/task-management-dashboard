@@ -29,7 +29,7 @@ function App() {
     if (!task.trim()) return;
 
     try {
-      await axios.post(API_URL, { title: task });
+      await axios.post(API_URL, { task: task });
       setTask("");
       fetchTasks();
     } catch (err) {
@@ -80,14 +80,14 @@ function App() {
           tasks.map((task) => (
   <div key={task._id}>
     <span>
-  {JSON.stringify}
+  {task.task}
 </span>
 
-    <button onClick={() => handleComplete(task._id)}>
+    <button onClick={() => toggleleComplete(task._id)}>
       Complete
     </button>
 
-    <button onClick={() => handleDelete(task._id)}>
+    <button onClick={() => deleteTask(task._id)}>
       Delete
     </button>
   </div>
