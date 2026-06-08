@@ -38,7 +38,11 @@ function App() {
   };
 
   // ❌ DELETE TASK
-  const deleteTask = async (id) => {
+ const deleteTask = async (id) => {
+  console.log("DELETE CLICKED", id);
+  await axios.delete(`${API_URL}/${id}`);
+  fetchTasks();
+};
     try {
       await axios.delete(`${API_URL}/${id}`);
       fetchTasks();
@@ -49,6 +53,10 @@ function App() {
 
   // ✅ TOGGLE COMPLETE (optional backend support)
   const toggleComplete = async (id) => {
+  console.log("COMPLETE CLICKED", id);
+  await axios.put(`${API_URL}/${id}`);
+  fetchTasks();
+};
     try {
       await axios.put(`${API_URL}/${id}`);
       fetchTasks();
