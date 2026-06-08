@@ -1,91 +1,98 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
+const API_URL = "https://task-management-dashboard-z4ud.onrender.com/tasks"; 
+// 🔴 IMPORTANT: replace with your actual Render backend URL
 
 function App() {
-  useEffect(() => {
-  axios.get("http://localhost:5000/tasks")
-    .then((res) => {
-      setTasks(res.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}, []);
-
+  const [tasks, setTasks] = useState([]);
   const [task, setTask] = useState("");
-  const [tasks, setTasks] = useState([
-  { text: "Learn React", completed: false },
-  { text: "Build MERN Project", completed: false },
-  { text: "Submit ScholarX Internship", completed: false },
-  ]);
 
-  const addTask = () => {
-    if (task.trim() === "") return;
-    setTasks([...tasks, task]);
-    setTask("");
+  // 📥 GET TASKS
+  const fetchTasks = async () => {
+  try {
+    const res = await axios.get(API_URL);
+    console.log("API DATA:", res.data); // IMPORTANT DEBUG
+    setTasks(res.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  // ➕ ADD TASK
+  const addTask = async () => {
+    if (!task.trim()) return;
+
+    try {
+      await axios.post(API_URL, { title: task });
+      setTask("");
+      fetchTasks();
+    } catch (err) {
+      console.log("Error adding task:", err);
+    }
   };
 
+  // ❌ DELETE TASK
+  const deleteTask = async (id) => {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      fetchTasks();
+    } catch (err) {
+      console.log("Error deleting task:", err);
+    }
+  };
+
+  // ✅ TOGGLE COMPLETE (optional backend support)
+  const toggleComplete = async (id) => {
+    try {
+      await axios.put(`${API_URL}/${id}`);
+      fetchTasks();
+    } catch (err) {
+      console.log("Error updating task:", err);
+    }
+  };
+ console.log("TASKS FROM API:",tasks);
   return (
-    
     <div className="container">
       <h1>Task Management Dashboard</h1>
-              <p>Manage your tasks efficiently</p>
-      <input
-        type="text"
-        placeholder="Enter task"
-        value={task}
-        onChange={(e) => setTask(e.target.value)}
-      />
 
-      <button onClick={addTask}>Add Task</button>
-<hr />
+      {/* INPUT */}
+      <div>
+        <input
+          type="text"
+          placeholder="Enter task"
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+        />
+        <button onClick={addTask}>Add Task</button>
+      </div>
 
-<h2>Tasks List</h2>
-
-<ul>
-  {tasks.map((task) => (
-    <li key={task._id}>{task.task}</li>
-  ))}
-</ul>
-      <ul>
-        {tasks.map((item, index) => (
-          <li key={index}>
-  <span
-  style={{
-    textDecoration: item.completed
-      ? "line-through"
-      : "none",
-    color: item.completed
-      ? "green"
-      : "black",
-  }}
->
-  {item.text}
+      {/* TASK LIST */}
+      <div>
+        {tasks.length === 0 ? (
+          <p>No tasks found</p>
+        ) : (
+          tasks.map((task) => (
+  <div key={task._id}>
+    <span>
+  {task.task}
 </span>
-<button
-  onClick={() => {
-    const updatedTasks = [...tasks];
-    updatedTasks[index].completed =
-      !updatedTasks[index].completed;
-    setTasks(updatedTasks);
-  }}
->
-  Complete
-</button>
-  <button
-    onClick={() => {
-      const updatedTasks = tasks.filter(
-        (_, i) => i !== index
-      );
-      setTasks(updatedTasks);
-    }}
-  >
-    Delete
-  </button>
-</li>
-        ))}
-      </ul>
+
+    <button onClick={() => handleComplete(task._id)}>
+      Complete
+    </button>
+
+    <button onClick={() => handleDelete(task._id)}>
+      Delete
+    </button>
+  </div>
+))
+        )}
+      </div>
     </div>
   );
 }

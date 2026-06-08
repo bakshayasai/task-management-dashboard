@@ -5,7 +5,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const Task = require("./models/Task");
 const app = express();
-
+import cors from "cors";
 app.use(cors());
 app.use(express.json());
 console.log(process.env.MONGO_URI);
@@ -27,18 +27,10 @@ app.get("/tasks", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 app.post("/tasks", async (req, res) => {
-  try {
-    const newTask = await Task.create({
-      task: req.body.task
-    });
-
-    res.json(newTask);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});  
+  const newTask = await Task.create(req.body);
+  res.json(newTask);
+});
 app.delete("/tasks/:id", async (req, res) => {
   try {
     await Task.findByIdAndDelete(req.params.id);
