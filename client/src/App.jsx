@@ -20,6 +20,7 @@ function App() {
 };
 
   useEffect(() => {
+    console.log("USEEFFECT RUNNING");
     fetchTasks();
   }, []);
 
@@ -79,7 +80,7 @@ function App() {
           tasks.map((task) => (
   <div key={task._id}>
     <span>
-  {task.task}
+  {JSON.stringify}
 </span>
 
     <button onClick={() => handleComplete(task._id)}>
