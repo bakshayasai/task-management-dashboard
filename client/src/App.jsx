@@ -80,11 +80,11 @@ function App() {
           tasks.map((task) => (
   <div key={task.id}>
     
-  <span
+  <span>
   style={{
     textDecoration: task.completed ? "line-through" : "none",
   }}
->
+
   {task.task}
 
 </span>
