@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
 const API_URL = "https://task-management-dashboard-z4ud.onrender.com/tasks"; 
-// 🔴 IMPORTANT: replace with your actual Render backend URL
+// IMPORTANT: replace with your actual Render backend URL
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -38,12 +38,9 @@ function App() {
   };
 
   // ❌ DELETE TASK
- const deleteTask = async (id) => {
-  console.log("DELETE CLICKED", id);
-  await axios.delete(`${API_URL}/${id}`);
-  fetchTasks();
-};
+  const deleteTask = async (id) => {
     try {
+      console.log("DELETE CLICKED", id);
       await axios.delete(`${API_URL}/${id}`);
       fetchTasks();
     } catch (err) {
@@ -53,18 +50,16 @@ function App() {
 
   // ✅ TOGGLE COMPLETE (optional backend support)
   const toggleComplete = async (id) => {
-  console.log("COMPLETE CLICKED", id);
-  await axios.put(`${API_URL}/${id}`);
-  fetchTasks();
-};
     try {
+      console.log("COMPLETE CLICKED", id);
       await axios.put(`${API_URL}/${id}`);
       fetchTasks();
     } catch (err) {
       console.log("Error updating task:", err);
     }
   };
- console.log("TASKS FROM API:",tasks);
+
+  console.log("TASKS FROM API:", tasks);
   return (
     <div className="container">
       <h1>Task Management Dashboard</h1>
@@ -91,7 +86,7 @@ function App() {
   {task.task}
 </span>
 
-    <button onClick={() => toggleleComplete(task._id)}>
+    <button onClick={() => toggleComplete(task._id)}>
       Complete
     </button>
 
@@ -105,5 +100,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
