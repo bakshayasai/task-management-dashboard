@@ -85,7 +85,7 @@ function App() {
     textDecoration: task.completed ? "line-through" : "none",
   }}
 
-  {task.task}
+  {JSON}
 
 </span>
 
