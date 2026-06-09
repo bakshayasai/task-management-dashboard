@@ -78,16 +78,16 @@ function App() {
           <p>No tasks found</p>
         ) : (
           tasks.map((task) => (
-  <div key={task._id}>
+  <div key={task.id}>
     <span>
-  {JSON.stringify(task)}
+  {task.task}
 </span>
 
-    <button onClick={() => toggleComplete(task._id)}>
+    <button onClick={() => toggleComplete(task.id)}>
       Complete
     </button>
 
-    <button onClick={() => deleteTask(task._id)}>
+    <button onClick={() => deleteTask(task.id)}>
       Delete
     </button>
   </div>
