@@ -39,25 +39,22 @@ function App() {
 
   // ❌ DELETE TASK
   const deleteTask = async (id) => {
-    try {
-      console.log("DELETE CLICKED", id);
-      await axios.delete(`${API_URL}/${id}`);
-      fetchTasks();
-    } catch (err) {
-      console.log("Error deleting task:", err);
-    }
-  };
-
+  try {
+    await axios.delete(`${API_URL}/${id}`);
+    fetchTasks();
+  } catch (err) {
+    console.log(err);
+  }
+};
   // ✅ TOGGLE COMPLETE (optional backend support)
   const toggleComplete = async (id) => {
-    try {
-      console.log("COMPLETE CLICKED", id);
-      await axios.put(`${API_URL}/${id}`);
-      fetchTasks();
-    } catch (err) {
-      console.log("Error updating task:", err);
-    }
-  };
+  try {
+    await axios.put(`${API_URL}/${id}`);
+    fetchTasks();
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   console.log("TASKS FROM API:", tasks);
   return (
