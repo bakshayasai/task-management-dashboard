@@ -80,7 +80,7 @@ function App() {
           tasks.map((task) => (
   <div key={task._id}>
     <span>
-  {task.task}
+  {JSON.stringify(task)}
 </span>
 
     <button onClick={() => toggleComplete(task._id)}>
