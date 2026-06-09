@@ -5,7 +5,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const Task = require("./models/Task");
 const app = express();
-import cors from "cors";
+
 app.use(cors());
 app.use(express.json());
 console.log(process.env.MONGO_URI);
