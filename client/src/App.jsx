@@ -78,7 +78,7 @@ function App() {
           <p>No tasks found</p>
         ) : (
           tasks.map((task) => (
-  <div key={task.id}>
+  <div key={task._id}>
     
   <span
   style={{
@@ -89,11 +89,11 @@ function App() {
 
 </span>
 
-    <button onClick={() => toggleComplete(task.id)}>
+    <button onClick={() => toggleComplete(task._id)}>
       Complete
     </button>
 
-    <button onClick={() => deleteTask(task.id)}>
+    <button onClick={() => deleteTask(task._id)}>
       Delete
     </button>
   </div>
