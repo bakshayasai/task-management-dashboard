@@ -43,8 +43,8 @@ function App() {
     await axios.delete(`${API_URL}/${id}`);
     fetchTasks();
   } catch (err) {
-    console.log(err);
-  }
+  console.log("DELETE ERROR:", err.response?.data);
+}
 };
   // ✅ TOGGLE COMPLETE (optional backend support)
   const toggleComplete = async (id) => {
